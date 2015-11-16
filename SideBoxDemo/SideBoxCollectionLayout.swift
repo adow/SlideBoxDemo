@@ -13,11 +13,13 @@ func divmod(a:CGFloat,b:CGFloat) -> (quotient:CGFloat, remainder:CGFloat){
 }
 
 class SideBoxCollectionLayout: UICollectionViewFlowLayout {
-    private let pageDistance : CGFloat = ceil(UIScreen.mainScreen().bounds.width * 0.5 + UIScreen.mainScreen().bounds.width * 0.6)
-    private let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.6
-    private let cardHeight : CGFloat = UIScreen.mainScreen().bounds.height * 0.6
+    let pageDistance : CGFloat = ceil(UIScreen.mainScreen().bounds.width * 0.5 + UIScreen.mainScreen().bounds.width * 0.6)
+    let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.6
+    let cardHeight : CGFloat = UIScreen.mainScreen().bounds.height * 0.6
     private var attributesList : [UICollectionViewLayoutAttributes] = []
     private var targetOffsetX : CGFloat = 0.0
+    /// 让第一页要滚动
+    var stopScrollForTopCards:Bool = false
     override init() {
         super.init()
         self.scrollDirection = UICollectionViewScrollDirection.Horizontal
@@ -51,28 +53,28 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
             attributes.zIndex = 10000 - a
             let scale = max(min(1.1, ratio), 0.0)
             let transform_scale = CGAffineTransformMakeScale(scale, scale)
-//            let transform_scale = CGAffineTransformIdentity
             if ratio > 1.0 {
                 var translate : CGFloat!
                 if ratio >= 1.1 {
-//                    translate = -1.0 * center_x + self.cardWidth / 2.0
                     translate = -1.0 * (self.collectionView!.bounds.width / 2.0 + self.cardWidth / 2.0)
-//                    translate = -300.0
                 }
                 else {
                     translate = -1.0 * offset_x % pageDistance
                     if translate == 0.0 {
                         translate = -pageDistance
                     }
-//                    translate = -1.0 * (offset_x - self.targetOffsetX)
                 }
-                print("\(a),\(ratio),\(scale), \(translate)")
+//                print("\(a),\(ratio),\(scale), \(translate)")
                 attributes.transform = CGAffineTransformTranslate(transform_scale, translate, 0.0)
             }
             else {
-                print("\(a),\(ratio),\(scale)")
+//                print("\(a),\(ratio),\(scale)")
                 attributes.transform = transform_scale
                 
+            }
+            if ratio > 1.0 && self.stopScrollForTopCards {
+//                NSLog("stopScrollForTopCards")
+                attributes.alpha = 0.0
             }
         
             array.append(attributes)
