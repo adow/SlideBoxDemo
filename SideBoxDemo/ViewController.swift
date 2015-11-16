@@ -172,7 +172,12 @@ extension ViewController:UIGestureRecognizerDelegate {
             let contentOffset = CGPointMake(contentOffsetX, 0.0)
             self.collectionView.setContentOffset(contentOffset, animated: true)
             /// pan
-            self.cellSnapShot.transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
+            let transform_translate = CGAffineTransformMakeTranslation(translate.x, translate.y)
+//            self.cellSnapShot.transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
+            let angle = atan(translate.y / translate.x)
+//            print("angle:\(angle)")
+            let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
+            self.cellSnapShot.transform = CGAffineTransformRotate(transform_translate, radian)
         }
     }
     func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
