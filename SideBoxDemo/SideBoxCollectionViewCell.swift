@@ -17,6 +17,7 @@ import UIKit
 
 class SideBoxCollectionViewCell: UICollectionViewCell {
     var label : UILabel!
+    var cellImageView :UIImageView!
     weak var cellDelegate : SideBoxCollectionViewCellDelegate?
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +26,16 @@ class SideBoxCollectionViewCell: UICollectionViewCell {
         self.layer.shadowOffset = CGSizeMake(-1.0, -1.0)
         self.layer.shadowOpacity = 0.5
         self.layer.shadowPath = UIBezierPath(rect: self.bounds).CGPath
+        /// image 
+        cellImageView = UIImageView()
+        cellImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(cellImageView)
+        let layout_cellImageView = ["cellImageView":cellImageView]
+        let cellImageView_constraintsH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(0.0)-[cellImageView]-(0.0)-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: layout_cellImageView)
+        let cellImageView_constraintsV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(0.0)-[cellImageView]-(0.0)-|", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: layout_cellImageView)
+        self.contentView.addConstraints(cellImageView_constraintsH)
+        self.contentView.addConstraints(cellImageView_constraintsV)
+        
         /// label
         label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

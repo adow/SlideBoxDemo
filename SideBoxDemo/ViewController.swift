@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var cellSnapShot:UIView!
     var indexPathSnapShot:NSIndexPath!
     var cellTexts:[String]!
+    var cellImages:[UIImage]!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -57,9 +58,14 @@ class ViewController: UIViewController {
     }
     private func prepareData(){
         self.cellTexts = [String]()
+        self.cellImages = [UIImage]()
         for a in 0..<30 {
             let txt = "Card - \(a)"
             self.cellTexts.append(txt)
+            let imageIndex = a % 5
+            let imageName = "cell-\(imageIndex)"
+            let image = UIImage(named: imageName)!
+            self.cellImages.append(image)
         }
     }
 
@@ -77,6 +83,8 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate 
 //        cell.label.text = "Card - \(indexPath.row)"
         let txt = self.cellTexts[indexPath.row]
         cell.label.text = txt
+        let image = self.cellImages[indexPath.row]
+        cell.cellImageView.image = image
         return cell
     }
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
