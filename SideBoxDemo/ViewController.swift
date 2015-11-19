@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.prepareData()
         /// collectionView
-        collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: SideBoxCollectionLayout())
+        collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: SlideBoxCollectionLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor.whiteColor()
         collectionView.showsHorizontalScrollIndicator = true
@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         let collection_constraintsV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(0.0)-[collectionView]-(0.0)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: collectionView_layout)
         self.view.addConstraints(collection_constraintsH)
         self.view.addConstraints(collection_constraintsV)
-        self.collectionView.registerClass(SideBoxCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        self.collectionView.registerClass(SlideBoxCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
     }
@@ -70,7 +70,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate 
         return self.cellTexts.count
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! SideBoxCollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! SlideBoxCollectionViewCell
         cell.cellDelegate = self
         let txt = self.cellTexts[indexPath.row]
         cell.label.text = txt
@@ -84,22 +84,22 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate 
 }
 
 // MARK: - Move on cell
-extension ViewController:SideBoxCollectionViewCellDelegate {
+extension ViewController:SlideBoxCollectionViewCellDelegate {
     /// 取得拖动的 cell 的下面一个 cell
-    private func nextCell() -> SideBoxCollectionViewCell?{
-        let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
+    private func nextCell() -> SlideBoxCollectionViewCell?{
+        let layout = self.collectionView.collectionViewLayout as! SlideBoxCollectionLayout
         let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
         let nextIndexPath = NSIndexPath(forItem: cardIndex + 1, inSection: 0)
-        return self.collectionView.cellForItemAtIndexPath(nextIndexPath) as? SideBoxCollectionViewCell
+        return self.collectionView.cellForItemAtIndexPath(nextIndexPath) as? SlideBoxCollectionViewCell
     }
-    func movedBeganOnCell(cell: SideBoxCollectionViewCell) {
+    func movedBeganOnCell(cell: SlideBoxCollectionViewCell) {
 //        NSLog("Began Move")
     }
-    func cell(cell: SideBoxCollectionViewCell, movedToNext toNext: Bool) {
+    func cell(cell: SlideBoxCollectionViewCell, completedWithRemove remove: Bool) {
 //        NSLog("End Move")
-        let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
+        let layout = self.collectionView.collectionViewLayout as! SlideBoxCollectionLayout
         /// 删除这个cell
-        if toNext {
+        if remove {
             let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
             let indexPath = NSIndexPath(forItem: cardIndex, inSection: 0)
             self.cellTexts.removeAtIndex(cardIndex)
@@ -112,8 +112,8 @@ extension ViewController:SideBoxCollectionViewCellDelegate {
             }
         }
     }
-    func cell(cell: SideBoxCollectionViewCell, translated translation: CGPoint) {
-        let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
+    func cell(cell: SlideBoxCollectionViewCell, translated translation: CGPoint) {
+        let layout = self.collectionView.collectionViewLayout as! SlideBoxCollectionLayout
         /// 在移动当前这个 cell 时，要根据拖动的距离来修正下面一个 cell 的位置，使他看上去再变大
         if let nextCell = self.nextCell() {
             let scale = max(min(0.9 + fabs(translation.y / layout.pageDistance) / 10.0 ,1.0),0.0) /// 因为下面一个 cell 开始时是 0.9

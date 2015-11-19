@@ -9,20 +9,20 @@
 import UIKit
 
 /// 在 cell 上拖动时发生的回调
-@objc protocol SideBoxCollectionViewCellDelegate {
+@objc protocol SlideBoxCollectionViewCellDelegate {
     /// 拖动开始时
-    func movedBeganOnCell(cell:SideBoxCollectionViewCell)
+    func movedBeganOnCell(cell:SlideBoxCollectionViewCell)
     /// 拖动结束时，是否需要跳转到下一页
-    func cell(cell:SideBoxCollectionViewCell, movedToNext toNext:Bool)
+    func cell(cell:SlideBoxCollectionViewCell, completedWithRemove remove:Bool)
     /// 拖动的过程中
-    func cell(cell:SideBoxCollectionViewCell, translated translation:CGPoint)
+    func cell(cell:SlideBoxCollectionViewCell, translated translation:CGPoint)
     
 }
 
-class SideBoxCollectionViewCell: UICollectionViewCell {
+class SlideBoxCollectionViewCell: UICollectionViewCell {
     var label : UILabel!
     var cellImageView :UIImageView!
-    weak var cellDelegate : SideBoxCollectionViewCellDelegate?
+    weak var cellDelegate : SlideBoxCollectionViewCellDelegate?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.lightGrayColor()
@@ -68,7 +68,7 @@ class SideBoxCollectionViewCell: UICollectionViewCell {
     
     
 }
-extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
+extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
     func onPanGesture(gesture:UIPanGestureRecognizer){
         if gesture.state == UIGestureRecognizerState.Began {
             self.cellDelegate?.movedBeganOnCell(self)
@@ -80,7 +80,7 @@ extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
                     self.transform = CGAffineTransformIdentity
                     }, completion: { (completed) -> Void in
-                        self.cellDelegate?.cell(self, movedToNext: false) /// 动画结束后修正位置
+                        self.cellDelegate?.cell(self, completedWithRemove: false) /// 动画结束后修正位置
                 })
             }
             else{ /// 只可以往上拖动（左右是滚动）, 距离足够大的话就实现删除效果
@@ -96,7 +96,7 @@ extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                     self.transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
-                        self.cellDelegate?.cell(self, movedToNext: true) /// 动画结束后修正位置，实现真正的删除
+                        self.cellDelegate?.cell(self, completedWithRemove: true) /// 动画结束后修正位置，实现真正的删除
                         
                 })
             }

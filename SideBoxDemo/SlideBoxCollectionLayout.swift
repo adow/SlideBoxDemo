@@ -12,7 +12,7 @@ func divmod(a:CGFloat,b:CGFloat) -> (quotient:CGFloat, remainder:CGFloat){
     return (a / b, a % b)
 }
 
-class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
+class SlideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     var ratio:CGFloat! {
         didSet{
             let scale = max(min(1.1, ratio), 0.0)
@@ -44,8 +44,8 @@ class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     var cardWidth:CGFloat!
     var cardHeight:CGFloat!
    
-    static func attribuatesForIndexPath(indexPath:NSIndexPath, pageDistance:CGFloat, cardWidth:CGFloat,cardHeight: CGFloat) -> SideBoxCollectionLayoutAttributes{
-        let attributes = SideBoxCollectionLayoutAttributes(forCellWithIndexPath: indexPath)
+    static func attribuatesForIndexPath(indexPath:NSIndexPath, pageDistance:CGFloat, cardWidth:CGFloat,cardHeight: CGFloat) -> SlideBoxCollectionLayoutAttributes{
+        let attributes = SlideBoxCollectionLayoutAttributes(forCellWithIndexPath: indexPath)
         attributes.pageDistance = pageDistance
         attributes.cardWidth = cardWidth
         attributes.cardHeight = cardHeight
@@ -53,7 +53,7 @@ class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     }
     
     override func copyWithZone(zone: NSZone) -> AnyObject {
-        let copy = super.copyWithZone(zone) as! SideBoxCollectionLayoutAttributes
+        let copy = super.copyWithZone(zone) as! SlideBoxCollectionLayoutAttributes
         copy.screenSize = self.screenSize
         copy.pageDistance = self.pageDistance
         copy.cardWidth = self.cardWidth
@@ -63,7 +63,7 @@ class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     }
 }
 
-class SideBoxCollectionLayout: UICollectionViewFlowLayout {
+class SlideBoxCollectionLayout: UICollectionViewFlowLayout {
     let pageDistance : CGFloat = ceil(UIScreen.mainScreen().bounds.width * 0.5 + UIScreen.mainScreen().bounds.width * 0.6)
     let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.6
     let cardHeight : CGFloat = UIScreen.mainScreen().bounds.height * 0.6
@@ -98,7 +98,7 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
             /// 计算 ratio, ratio 使用来确定真正位置的参数，每个 cell 直接差 0.1,还要计算当前滚动的位置
             let ratio = 1.0 - ( CGFloat(a) * 0.1) + (offset_x / pageDistance) / 10.0
             let indexPath = NSIndexPath(forItem: a, inSection: 0)
-            let attributes = SideBoxCollectionLayoutAttributes.attribuatesForIndexPath(indexPath, pageDistance: pageDistance, cardWidth: cardWidth, cardHeight: cardHeight)
+            let attributes = SlideBoxCollectionLayoutAttributes.attribuatesForIndexPath(indexPath, pageDistance: pageDistance, cardWidth: cardWidth, cardHeight: cardHeight)
             attributes.center = center
             attributes.bounds = bounds
             attributes.zIndex = 10000 - a

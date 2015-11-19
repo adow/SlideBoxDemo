@@ -12,20 +12,20 @@
 		68DB5B5F1BF5831300F3B97B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68DB5B5D1BF5831300F3B97B /* Main.storyboard */; };
 		68DB5B611BF5831300F3B97B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68DB5B601BF5831300F3B97B /* Assets.xcassets */; };
 		68DB5B641BF5831300F3B97B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68DB5B621BF5831300F3B97B /* LaunchScreen.storyboard */; };
-		68DB5B6C1BF5839100F3B97B /* SideBoxCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DB5B6B1BF5839100F3B97B /* SideBoxCollectionViewCell.swift */; };
-		68DB5B6E1BF583FD00F3B97B /* SideBoxCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DB5B6D1BF583FD00F3B97B /* SideBoxCollectionLayout.swift */; };
+		68DB5B6C1BF5839100F3B97B /* SlideBoxCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DB5B6B1BF5839100F3B97B /* SlideBoxCollectionViewCell.swift */; };
+		68DB5B6E1BF583FD00F3B97B /* SlideBoxCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DB5B6D1BF583FD00F3B97B /* SlideBoxCollectionLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		68DB5B561BF5831300F3B97B /* SideBoxDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SideBoxDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68DB5B561BF5831300F3B97B /* SlideBoxDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlideBoxDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68DB5B591BF5831300F3B97B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		68DB5B5B1BF5831300F3B97B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		68DB5B5E1BF5831300F3B97B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		68DB5B601BF5831300F3B97B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68DB5B631BF5831300F3B97B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		68DB5B651BF5831300F3B97B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		68DB5B6B1BF5839100F3B97B /* SideBoxCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBoxCollectionViewCell.swift; sourceTree = "<group>"; };
-		68DB5B6D1BF583FD00F3B97B /* SideBoxCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBoxCollectionLayout.swift; sourceTree = "<group>"; };
+		68DB5B6B1BF5839100F3B97B /* SlideBoxCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideBoxCollectionViewCell.swift; sourceTree = "<group>"; };
+		68DB5B6D1BF583FD00F3B97B /* SlideBoxCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideBoxCollectionLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +42,7 @@
 		68DB5B4D1BF5831300F3B97B = {
 			isa = PBXGroup;
 			children = (
-				68DB5B581BF5831300F3B97B /* SideBoxDemo */,
+				68DB5B581BF5831300F3B97B /* SlideBoxDemo */,
 				68DB5B571BF5831300F3B97B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,32 +50,33 @@
 		68DB5B571BF5831300F3B97B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				68DB5B561BF5831300F3B97B /* SideBoxDemo.app */,
+				68DB5B561BF5831300F3B97B /* SlideBoxDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		68DB5B581BF5831300F3B97B /* SideBoxDemo */ = {
+		68DB5B581BF5831300F3B97B /* SlideBoxDemo */ = {
 			isa = PBXGroup;
 			children = (
 				68DB5B591BF5831300F3B97B /* AppDelegate.swift */,
 				68DB5B5B1BF5831300F3B97B /* ViewController.swift */,
-				68DB5B6B1BF5839100F3B97B /* SideBoxCollectionViewCell.swift */,
-				68DB5B6D1BF583FD00F3B97B /* SideBoxCollectionLayout.swift */,
+				68DB5B6B1BF5839100F3B97B /* SlideBoxCollectionViewCell.swift */,
+				68DB5B6D1BF583FD00F3B97B /* SlideBoxCollectionLayout.swift */,
 				68DB5B5D1BF5831300F3B97B /* Main.storyboard */,
 				68DB5B601BF5831300F3B97B /* Assets.xcassets */,
 				68DB5B621BF5831300F3B97B /* LaunchScreen.storyboard */,
 				68DB5B651BF5831300F3B97B /* Info.plist */,
 			);
+			name = SlideBoxDemo;
 			path = SideBoxDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		68DB5B551BF5831300F3B97B /* SideBoxDemo */ = {
+		68DB5B551BF5831300F3B97B /* SlideBoxDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68DB5B681BF5831300F3B97B /* Build configuration list for PBXNativeTarget "SideBoxDemo" */;
+			buildConfigurationList = 68DB5B681BF5831300F3B97B /* Build configuration list for PBXNativeTarget "SlideBoxDemo" */;
 			buildPhases = (
 				68DB5B521BF5831300F3B97B /* Sources */,
 				68DB5B531BF5831300F3B97B /* Frameworks */,
@@ -85,9 +86,9 @@
 			);
 			dependencies = (
 			);
-			name = SideBoxDemo;
+			name = SlideBoxDemo;
 			productName = SideBoxDemo;
-			productReference = 68DB5B561BF5831300F3B97B /* SideBoxDemo.app */;
+			productReference = 68DB5B561BF5831300F3B97B /* SlideBoxDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,7 +106,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 68DB5B511BF5831300F3B97B /* Build configuration list for PBXProject "SideBoxDemo" */;
+			buildConfigurationList = 68DB5B511BF5831300F3B97B /* Build configuration list for PBXProject "SlideBoxDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -118,7 +119,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				68DB5B551BF5831300F3B97B /* SideBoxDemo */,
+				68DB5B551BF5831300F3B97B /* SlideBoxDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -141,10 +142,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68DB5B6E1BF583FD00F3B97B /* SideBoxCollectionLayout.swift in Sources */,
+				68DB5B6E1BF583FD00F3B97B /* SlideBoxCollectionLayout.swift in Sources */,
 				68DB5B5C1BF5831300F3B97B /* ViewController.swift in Sources */,
 				68DB5B5A1BF5831300F3B97B /* AppDelegate.swift in Sources */,
-				68DB5B6C1BF5839100F3B97B /* SideBoxCollectionViewCell.swift in Sources */,
+				68DB5B6C1BF5839100F3B97B /* SlideBoxCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +259,7 @@
 				INFOPLIST_FILE = SideBoxDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = adow.SideBoxDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SlideBoxDemo;
 			};
 			name = Debug;
 		};
@@ -269,14 +270,14 @@
 				INFOPLIST_FILE = SideBoxDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = adow.SideBoxDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SlideBoxDemo;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		68DB5B511BF5831300F3B97B /* Build configuration list for PBXProject "SideBoxDemo" */ = {
+		68DB5B511BF5831300F3B97B /* Build configuration list for PBXProject "SlideBoxDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				68DB5B661BF5831300F3B97B /* Debug */,
@@ -285,13 +286,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		68DB5B681BF5831300F3B97B /* Build configuration list for PBXNativeTarget "SideBoxDemo" */ = {
+		68DB5B681BF5831300F3B97B /* Build configuration list for PBXNativeTarget "SlideBoxDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				68DB5B691BF5831300F3B97B /* Debug */,
 				68DB5B6A1BF5831300F3B97B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
