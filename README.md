@@ -6,6 +6,8 @@ Slidebox 是 iOS 上一个用来管理照片的 App，他一张张的滑动方�
 
 > 大坑警告。这个 Demo 使用 UICollectionView 来实现这个效果，但是这并不是最优的方案，实际上这个效果直接使用 UIScrollView 就可以轻松合理的实现了，我使用 UICollectionView 只是为了学习研究而已。
 
+![SlideBoxDemo](http://7vihfk.com1.z0.glb.clouddn.com/SlideBoxDemo.mov.gif)
+
 ## 实现左右切换
 
 由于使用 UICollectionView 来实现这个效果，所以最重要的是实现 UICollectionViewLayout，其中是用来完成每个 Cell 位置计算。
@@ -108,25 +110,25 @@ Slidebox 是 iOS 上一个用来管理照片的 App，他一张张的滑动方�
 
 当 Cell 被拖动的时候, 需要让下面的 Cell 变大
 
-	func cell(cell: SlideBoxCollectionViewCell, completedWithRemove remove: Bool) {
-//        NSLog("End Move")
-		let layout = self.collectionView.collectionViewLayout as! SlideBoxCollectionLayout
-		/// 删除这个cell
-		if remove {
-		    let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
-		    let indexPath = NSIndexPath(forItem: cardIndex, inSection: 0)
-		    self.cellTexts.removeAtIndex(cardIndex)
-		    self.cellImages.removeAtIndex(cardIndex)
-		    self.collectionView.deleteItemsAtIndexPaths([indexPath,])
-		}
-		else { /// 不用删除这个 cell, 回到原来的位置
-		    if let nextCell = self.nextCell(){
-			UIView.animateWithDuration(0.3, animations: { () -> Void in
-			    nextCell.transform = CGAffineTransformMakeScale(0.9, 0.9)
-			})
+		func cell(cell: SlideBoxCollectionViewCell, completedWithRemove remove: Bool) {
+	//        NSLog("End Move")
+			let layout = self.collectionView.collectionViewLayout as! SlideBoxCollectionLayout
+			/// 删除这个cell
+			if remove {
+			    let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
+			    let indexPath = NSIndexPath(forItem: cardIndex, inSection: 0)
+			    self.cellTexts.removeAtIndex(cardIndex)
+			    self.cellImages.removeAtIndex(cardIndex)
+			    self.collectionView.deleteItemsAtIndexPaths([indexPath,])
+			}
+			else { /// 不用删除这个 cell, 回到原来的位置
+			    if let nextCell = self.nextCell(){
+				UIView.animateWithDuration(0.3, animations: { () -> Void in
+				    nextCell.transform = CGAffineTransformMakeScale(0.9, 0.9)
+				})
+			    }
+			}
 		    }
-		}
-	    }
 
 当拖动结束的时候，需要确定是不是真的要删除这个 Cell
 
