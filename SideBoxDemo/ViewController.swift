@@ -79,7 +79,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate 
         return cell
     }
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        NSLog("scroll:%f",scrollView.contentOffset.x)
+//        NSLog("scroll:%f",scrollView.contentOffset.x)
     }
 }
 
@@ -92,10 +92,10 @@ extension ViewController:SideBoxCollectionViewCellDelegate {
         return self.collectionView.cellForItemAtIndexPath(nextIndexPath) as? SideBoxCollectionViewCell
     }
     func movedBeganOnCell(cell: SideBoxCollectionViewCell) {
-        NSLog("Began Move")
+//        NSLog("Began Move")
     }
     func cell(cell: SideBoxCollectionViewCell, movedToNext toNext: Bool) {
-        NSLog("End Move")
+//        NSLog("End Move")
         let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
         if toNext {
             let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))

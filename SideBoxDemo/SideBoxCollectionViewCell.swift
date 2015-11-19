@@ -80,7 +80,15 @@ extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
             }
             else{
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
-                    self.transform = CGAffineTransformMakeTranslation(translate.x, -1 * self.bounds.size.width)
+                    var targetOffsetX : CGFloat = 0.0
+                    if translate.x > 0 {
+                        targetOffsetX = self.bounds.size.width
+                    }
+                    else {
+                        targetOffsetX = -1 * self.bounds.size.width
+                    }
+                    let targetOffsetY : CGFloat = -1 * self.bounds.size.height
+                    self.transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
                         self.cellDelegate?.cell(self, movedToNext: true)
@@ -90,12 +98,14 @@ extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
         }
         else if gesture.state == UIGestureRecognizerState.Changed {
             let translate = gesture.translationInView(self.contentView)
-            if abs(translate.y) > abs(translate.x) {
-                let translate_transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
-                let radian = atan(translate.y / translate.x)
-                let angle = -radian * CGFloat(M_PI) / 180.0 * 2.0
-                self.transform = CGAffineTransformRotate(translate_transform, angle)
+            let translate_transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
+            var angle : CGFloat = 0.0
+            if abs(translate.x) > 20.0 {
+                angle = atan(translate.y / translate.x)
+//                print("x:\(translate.x),y:\(translate.y),angle:\(angle)")
             }
+            let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
+            self.transform = CGAffineTransformRotate(translate_transform, radian)
             self.cellDelegate?.cell(self, translated: translate)
         }
         

@@ -132,7 +132,7 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
             self.targetOffsetX = min(self.collectionView!.contentSize.width - self.collectionView!.bounds.width, self.targetOffsetX)
         }
         targetContentOffset.x = self.targetOffsetX
-        NSLog("targetOffsetX:%f",self.targetOffsetX)
+//        NSLog("targetOffsetX:%f",self.targetOffsetX)
         return targetContentOffset
     }
     override func finalLayoutAttributesForDisappearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
