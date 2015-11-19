@@ -80,8 +80,8 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
                     self.transform = CGAffineTransformIdentity
                     }, completion: { (completed) -> Void in
-                        self.cellDelegate?.cell(self, completedWithRemove: false) /// 动画结束后修正位置
                 })
+                self.cellDelegate?.cell(self, completedWithRemove: false) /// 动画结束后修正位置
             }
             else{ /// 只可以往上拖动（左右是滚动）, 距离足够大的话就实现删除效果
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
@@ -97,7 +97,6 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
                         self.cellDelegate?.cell(self, completedWithRemove: true) /// 动画结束后修正位置，实现真正的删除
-                        
                 })
             }
         }

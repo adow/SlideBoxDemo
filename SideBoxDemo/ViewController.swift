@@ -108,7 +108,9 @@ extension ViewController:SlideBoxCollectionViewCellDelegate {
         }
         else { /// 不用删除这个 cell, 回到原来的位置
             if let nextCell = self.nextCell(){
-                nextCell.transform = CGAffineTransformIdentity
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    nextCell.transform = CGAffineTransformMakeScale(0.9, 0.9)
+                })
             }
         }
     }

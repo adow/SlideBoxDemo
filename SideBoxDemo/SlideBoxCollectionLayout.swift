@@ -44,7 +44,7 @@ class SlideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     var cardWidth:CGFloat!
     var cardHeight:CGFloat!
    
-    static func attribuatesForIndexPath(indexPath:NSIndexPath, pageDistance:CGFloat, cardWidth:CGFloat,cardHeight: CGFloat) -> SlideBoxCollectionLayoutAttributes{
+    class func attribuatesForIndexPath(indexPath:NSIndexPath, pageDistance:CGFloat, cardWidth:CGFloat,cardHeight: CGFloat) -> SlideBoxCollectionLayoutAttributes{
         let attributes = SlideBoxCollectionLayoutAttributes(forCellWithIndexPath: indexPath)
         attributes.pageDistance = pageDistance
         attributes.cardWidth = cardWidth
@@ -117,6 +117,9 @@ class SlideBoxCollectionLayout: UICollectionViewFlowLayout {
     
     override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
         return true
+    }
+    override class func layoutAttributesClass() -> AnyClass {
+        return SlideBoxCollectionViewCell.self
     }
     /// 确保每次只滚动一页的距离，不管实际滚动多少，只要和上一次位置距离超过 30 就进行页面跳转(滚动)
     override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
