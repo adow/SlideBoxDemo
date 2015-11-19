@@ -93,7 +93,10 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                         targetOffsetX = -1 * self.bounds.size.width
                     }
                     let targetOffsetY : CGFloat = -1 * self.bounds.size.height
-                    self.transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
+                    let translate_transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
+                    let angle : CGFloat = 0.0
+                    let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
+                    self.transform = CGAffineTransformRotate(translate_transform, radian)
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
                         self.cellDelegate?.cell(self, completedWithRemove: true) /// 动画结束后修正位置，实现真正的删除
