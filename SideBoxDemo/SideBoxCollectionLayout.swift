@@ -12,6 +12,49 @@ func divmod(a:CGFloat,b:CGFloat) -> (quotient:CGFloat, remainder:CGFloat){
     return (a / b, a % b)
 }
 
+class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
+    var ratio:CGFloat! {
+        didSet{
+            let scale = max(min(1.1, ratio), 0.0)
+            let transform_scale = CGAffineTransformMakeScale(scale, scale)
+            if ratio > 1.0 {
+                var translate : CGFloat!
+                if ratio >= 1.1 {
+                    translate = -1.0 * (self.screenSize.width / 2.0 + self.cardWidth / 2.0)
+                }
+                else {
+//                    translate = -1.0 * offset_x % pageDistance
+                    translate = -1.0 * (ratio - floor(ratio)) * pageDistance * 10.0
+                    if translate == 0.0 {
+                        translate = -pageDistance
+                    }
+                }
+//                print("\(a),\(ratio),\(scale), \(translate)")
+                self.transform = CGAffineTransformTranslate(transform_scale, translate, 0.0)
+            }
+            else {
+//                print("\(a),\(ratio),\(scale)")
+                self.transform = transform_scale
+                
+            }
+            
+        }
+    }
+    var screenSize:CGSize!
+    var pageDistance:CGFloat!
+    var cardWidth:CGFloat!
+    var cardHeight:CGFloat!
+    override func copyWithZone(zone: NSZone) -> AnyObject {
+        let copy = super.copyWithZone(zone) as! SideBoxCollectionLayoutAttributes
+        copy.screenSize = self.screenSize
+        copy.pageDistance = self.pageDistance
+        copy.cardWidth = self.cardWidth
+        copy.cardHeight = self.cardHeight
+        copy.ratio = ratio
+        return copy
+    }
+}
+
 class SideBoxCollectionLayout: UICollectionViewFlowLayout {
     let pageDistance : CGFloat = ceil(UIScreen.mainScreen().bounds.width * 0.5 + UIScreen.mainScreen().bounds.width * 0.6)
     let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.6
@@ -46,37 +89,24 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
         for a in 0..<numberOfItems {
             let bounds = CGRectMake(0.0, 0.0, self.cardWidth, self.cardHeight)
             let ratio = 1.0 - ( CGFloat(a) * 0.1) + (offset_x / pageDistance) / 10.0
+            
             let indexPath = NSIndexPath(forItem: a, inSection: 0)
-            let attributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+            let attributes = SideBoxCollectionLayoutAttributes(forCellWithIndexPath: indexPath)
             attributes.center = center
             attributes.bounds = bounds
             attributes.zIndex = 10000 - a
-            let scale = max(min(1.1, ratio), 0.0)
-            let transform_scale = CGAffineTransformMakeScale(scale, scale)
-            if ratio > 1.0 {
-                var translate : CGFloat!
-                if ratio >= 1.1 {
-                    translate = -1.0 * (self.collectionView!.bounds.width / 2.0 + self.cardWidth / 2.0)
-                }
-                else {
-                    translate = -1.0 * offset_x % pageDistance
-                    if translate == 0.0 {
-                        translate = -pageDistance
-                    }
-                }
-//                print("\(a),\(ratio),\(scale), \(translate)")
-                attributes.transform = CGAffineTransformTranslate(transform_scale, translate, 0.0)
-            }
-            else {
-//                print("\(a),\(ratio),\(scale)")
-                attributes.transform = transform_scale
-                
-            }
-            if ratio > 1.0 && self.stopScrollForTopCards {
-//                NSLog("stopScrollForTopCards")
-                attributes.alpha = 0.0
-            }
-        
+            attributes.screenSize = UIScreen.mainScreen().bounds.size
+            attributes.pageDistance = self.pageDistance
+            attributes.cardWidth = self.cardWidth
+            attributes.cardHeight = self.cardHeight
+            attributes.ratio = ratio
+//            if ratio >= 1.0 && self.stopScrollForTopCards {
+//                attributes.ratio = 1.0
+//            }
+//            else{
+//                attributes.ratio = ratio
+//            }
+//            print("\(a):\(ratio)")
             array.append(attributes)
         }
         self.attributesList = array
@@ -108,17 +138,9 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
         targetContentOffset.x = self.targetOffsetX
         NSLog("targetOffsetX:%f",self.targetOffsetX)
         return targetContentOffset
-//        var targetContentOffset = proposedContentOffset
-//        let y_distance_in_cells = self.pageDistance
-//        let (total,more) = divmod(targetContentOffset.x, b: y_distance_in_cells)
-//        if more > 0.0 {
-//            if more >= y_distance_in_cells / 2.0 {
-//                targetContentOffset.x = ceil(total) * y_distance_in_cells
-//            }
-//            else {
-//                targetContentOffset.x = floor(total) * y_distance_in_cells
-//            }
-//        }
-//        return targetContentOffset
+    }
+    override func finalLayoutAttributesForDisappearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+//        print("disappearing:\(itemIndexPath.row)")
+        return nil
     }
 }

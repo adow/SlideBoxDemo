@@ -37,12 +37,6 @@ class ViewController: UIViewController {
         self.collectionView.registerClass(SideBoxCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-        /// panGesture
-        panGesture = UIPanGestureRecognizer(target: self, action: "onPanGesture:")
-        panGesture.delegate = self
-        self.view.addGestureRecognizer(panGesture)
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,7 +74,7 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate 
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! SideBoxCollectionViewCell
-//        cell.label.text = "Card - \(indexPath.row)"
+        cell.cellDelegate = self
         let txt = self.cellTexts[indexPath.row]
         cell.label.text = txt
         let image = self.cellImages[indexPath.row]
@@ -91,124 +85,44 @@ extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate 
         NSLog("scroll:%f",scrollView.contentOffset.x)
     }
 }
-extension ViewController {
-    private func makeCellSnapView(){
+
+// MARK: - Move on cell
+extension ViewController:SideBoxCollectionViewCellDelegate {
+    private func nextCell() -> SideBoxCollectionViewCell?{
         let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
         let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
-        let pathIndex = NSIndexPath(forItem: cardIndex, inSection: 0)
-        self.indexPathSnapShot = pathIndex
-        let cell = self.collectionView.cellForItemAtIndexPath(pathIndex)!
-        self.cellSnapShot = cell.snapshotViewAfterScreenUpdates(true)
-//        self.cellSnapShot.alpha = 0.3
-        self.cellSnapShot.center = self.view.center
-        self.cellSnapShot.bounds = CGRectMake(0.0, 0.0, layout.cardWidth, layout.cardHeight)
-        self.cellSnapShot.userInteractionEnabled = false
-        self.view.addSubview(self.cellSnapShot)
-        
+        let nextIndexPath = NSIndexPath(forItem: cardIndex + 1, inSection: 0)
+        return self.collectionView.cellForItemAtIndexPath(nextIndexPath) as? SideBoxCollectionViewCell
     }
-}
-extension ViewController:UIGestureRecognizerDelegate {
-    func onPanGesture(gesture:UIPanGestureRecognizer){
-        if gesture.state == UIGestureRecognizerState.Began {
-            NSLog("Began Move")
-            self.makeCellSnapView()
-            self.contentOffsetX_onPanBegan = self.collectionView.contentOffset.x
-            let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
-            layout.stopScrollForTopCards = true
-        }
-        else if gesture.state == UIGestureRecognizerState.Ended || gesture.state == UIGestureRecognizerState.Cancelled {
-            NSLog("End Move")
-            let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
-            let translate = gesture.translationInView(self.view)
-            /// 如果拖动距离太短就退回到原来的位置,滚动条也返回到原来的位置
-            if translate.y > -1 * layout.pageDistance / 2.0 {
-                UIView.animateWithDuration(0.3, animations: { () -> Void in
-                    self.cellSnapShot.transform = CGAffineTransformIdentity
-                    }, completion: { (completed) -> Void in
-                    self.cellSnapShot.removeFromSuperview()
-                    layout.stopScrollForTopCards = false
-                })
-                let contentOffset = CGPointMake(self.contentOffsetX_onPanBegan, 0.0)
-                self.collectionView.setContentOffset(contentOffset, animated: true)
-            }
-            else { /// 否则就滚动到下一个位置
-                UIView.animateWithDuration(0.3, animations: { () -> Void in
-                    self.cellSnapShot.transform = CGAffineTransformMakeTranslation(translate.x, -1 * layout.pageDistance)
-                    self.cellSnapShot.alpha = 0.0
-                    }, completion: { (completed) -> Void in
-                        self.cellSnapShot.removeFromSuperview()
-                        
-                })
-                
-//                let contentOffsetX = self.contentOffsetX_onPanBegan + layout.pageDistance
-//                let contentOffset = CGPointMake(contentOffsetX, 0.0)
-//                self.collectionView.setContentOffset(contentOffset, animated: true)
-                
-                let contentOffset = CGPointMake(self.contentOffsetX_onPanBegan, 0.0)
-                self.collectionView.setContentOffset(contentOffset, animated: false)
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.0 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
-//                    self.collectionView.performBatchUpdates({ () -> Void in
-//                        self.cellTexts.removeAtIndex(self.indexPathSnapShot.row)
-//                        self.collectionView.deleteItemsAtIndexPaths([self.indexPathSnapShot,])
-//                        }, completion: { (completed) -> Void in
-//                            layout.stopScrollForTopCards = false
-//                    })
-//                    
-//                    
-//                }
-                self.collectionView.performBatchUpdates({ () -> Void in
-                    self.cellTexts.removeAtIndex(self.indexPathSnapShot.row)
-                    self.collectionView.deleteItemsAtIndexPaths([self.indexPathSnapShot,])
-                    }, completion: { (completed) -> Void in
-                        layout.stopScrollForTopCards = false
-                })
-
-            }
-        }
-        else if gesture.state == UIGestureRecognizerState.Changed {
-            let translate = gesture.translationInView(self.view)
-            /// scroll
-            let contentOffsetX = self.contentOffsetX_onPanBegan + (-1 * translate.y)
-            let contentOffset = CGPointMake(contentOffsetX, 0.0)
-            self.collectionView.setContentOffset(contentOffset, animated: true)
-            /// pan
-            let transform_translate = CGAffineTransformMakeTranslation(translate.x, translate.y)
-//            self.cellSnapShot.transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
-            let angle = atan(translate.y / translate.x)
-//            print("angle:\(angle)")
-            let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
-            self.cellSnapShot.transform = CGAffineTransformRotate(transform_translate, radian)
-        }
-    }
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
-            return true
-        }
-        let translate = panGesture.translationInView(self.view)
-        return abs(translate.y) > abs(translate.x)
-    }
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-}
-extension ViewController:SideBoxCollectionViewCellDelegate {
     func movedBeganOnCell(cell: SideBoxCollectionViewCell) {
         NSLog("Began Move")
         let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
         layout.stopScrollForTopCards = true
         self.contentOffsetX_onPanBegan = self.collectionView.contentOffset.x
     }
-    func movedEndedOnCell(cell: SideBoxCollectionViewCell) {
+    func cell(cell: SideBoxCollectionViewCell, movedToNext toNext: Bool) {
         NSLog("End Move")
         let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
         layout.stopScrollForTopCards = false
-        let contentOffsetX = self.contentOffsetX_onPanBegan + layout.pageDistance
-        self.collectionView.setContentOffset(CGPointMake(contentOffsetX, 0.0), animated: true)
-
+        if toNext {
+            let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
+            let indexPath = NSIndexPath(forItem: cardIndex, inSection: 0)
+            self.cellTexts.removeAtIndex(cardIndex)
+            self.cellImages.removeAtIndex(cardIndex)
+            self.collectionView.deleteItemsAtIndexPaths([indexPath,])
+        }
+        else {
+            if let nextCell = self.nextCell(){
+                nextCell.transform = CGAffineTransformIdentity
+            }
+        }
     }
     func cell(cell: SideBoxCollectionViewCell, translated translation: CGPoint) {
-        let contentOffsetX = self.contentOffsetX_onPanBegan + translation.y
-        let contentOffset = CGPointMake(contentOffsetX, 0.0)
-        self.collectionView.setContentOffset(contentOffset, animated: true)
+        let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
+        if let nextCell = self.nextCell() {
+            let scale = max(min(0.9 + fabs(translation.y / layout.pageDistance) / 10.0 ,1.0),0.0)
+            nextCell.transform = CGAffineTransformMakeScale(scale, scale)
+            
+        }
     }
 }

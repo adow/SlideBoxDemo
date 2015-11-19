@@ -10,7 +10,8 @@ import UIKit
 
 @objc protocol SideBoxCollectionViewCellDelegate {
     func movedBeganOnCell(cell:SideBoxCollectionViewCell)
-    func movedEndedOnCell(cell:SideBoxCollectionViewCell)
+//    func movedEndedOnCell(cell:SideBoxCollectionViewCell)
+    func cell(cell:SideBoxCollectionViewCell, movedToNext toNext:Bool)
     func cell(cell:SideBoxCollectionViewCell, translated translation:CGPoint)
     
 }
@@ -53,9 +54,9 @@ class SideBoxCollectionViewCell: UICollectionViewCell {
         let label_constraints_v = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self.contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0.0)
         self.contentView.addConstraint(label_constraints_v)
         /// panGesture
-//        let panGesture = UIPanGestureRecognizer(target: self, action: "onPanGesture:")
-//        panGesture.delegate = self
-//        self.contentView.addGestureRecognizer(panGesture)
+        let panGesture = UIPanGestureRecognizer(target: self, action: "onPanGesture:")
+        panGesture.delegate = self
+        self.contentView.addGestureRecognizer(panGesture)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,32 +65,51 @@ class SideBoxCollectionViewCell: UICollectionViewCell {
     
     
 }
-//extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
-//    func onPanGesture(gesture:UIPanGestureRecognizer){
-//        if gesture.state == UIGestureRecognizerState.Began {
-//            self.cellDelegate?.movedBeganOnCell(self)
-//        }
-//        else if gesture.state == UIGestureRecognizerState.Ended || gesture.state == UIGestureRecognizerState.Cancelled {
-//            self.cellDelegate?.movedEndedOnCell(self)
-//        }
-//        else if gesture.state == UIGestureRecognizerState.Changed {
-//            let translate = gesture.translationInView(self.contentView)
-//            if abs(translate.y) > abs(translate.x) {
-////                self.transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
-//            }
-//            self.cellDelegate?.cell(self, translated: translate)
-//        }
-//        
-//    }
-//    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return false
-//    }
-//    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
-//            return true
-//        }
-//        let translate = panGesture.translationInView(self.contentView)
-//        return abs(translate.y) > abs(translate.x)
-//    }
-//}
+extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
+    func onPanGesture(gesture:UIPanGestureRecognizer){
+        if gesture.state == UIGestureRecognizerState.Began {
+            self.cellDelegate?.movedBeganOnCell(self)
+        }
+        else if gesture.state == UIGestureRecognizerState.Ended || gesture.state == UIGestureRecognizerState.Cancelled {
+            let translate = gesture.translationInView(self.contentView)
+            if translate.y > -1 * self.bounds.size.height * 0.5 {
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.transform = CGAffineTransformIdentity
+                    }, completion: { (completed) -> Void in
+                        self.cellDelegate?.cell(self, movedToNext: false)
+                })
+            }
+            else{
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.transform = CGAffineTransformMakeTranslation(translate.x, -1 * self.bounds.size.width)
+                    self.alpha = 0.0
+                    }, completion: { (completed) -> Void in
+                        self.cellDelegate?.cell(self, movedToNext: true)
+                        
+                })
+            }
+        }
+        else if gesture.state == UIGestureRecognizerState.Changed {
+            let translate = gesture.translationInView(self.contentView)
+            if abs(translate.y) > abs(translate.x) {
+                let translate_transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
+                let radian = atan(translate.y / translate.x)
+                let angle = -radian * CGFloat(M_PI) / 180.0 * 2.0
+                self.transform = CGAffineTransformRotate(translate_transform, angle)
+            }
+            self.cellDelegate?.cell(self, translated: translate)
+        }
+        
+    }
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+            return true
+        }
+        let translate = panGesture.translationInView(self.contentView)
+        return abs(translate.y) > abs(translate.x)
+    }
+}
 
