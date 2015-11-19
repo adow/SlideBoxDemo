@@ -68,8 +68,8 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
     let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.6
     let cardHeight : CGFloat = UIScreen.mainScreen().bounds.height * 0.6
     private var attributesList : [UICollectionViewLayoutAttributes] = []
+    /// 用来在滚动时限定在一个固定的位置
     private var targetOffsetX : CGFloat = 0.0
-    /// 让第一页要滚动
     override init() {
         super.init()
         self.scrollDirection = UICollectionViewScrollDirection.Horizontal
@@ -93,10 +93,10 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
         let center_x : CGFloat = self.collectionView!.bounds.width / 2.0 + offset_x
         let center_y : CGFloat = self.collectionView!.bounds.height / 2.0
         let center = CGPointMake(center_x, center_y)
+        let bounds = CGRectMake(0.0, 0.0, self.cardWidth, self.cardHeight)
         for a in 0..<numberOfItems {
-            let bounds = CGRectMake(0.0, 0.0, self.cardWidth, self.cardHeight)
+            /// 计算 ratio, ratio 使用来确定真正位置的参数，每个 cell 直接差 0.1,还要计算当前滚动的位置
             let ratio = 1.0 - ( CGFloat(a) * 0.1) + (offset_x / pageDistance) / 10.0
-            
             let indexPath = NSIndexPath(forItem: a, inSection: 0)
             let attributes = SideBoxCollectionLayoutAttributes.attribuatesForIndexPath(indexPath, pageDistance: pageDistance, cardWidth: cardWidth, cardHeight: cardHeight)
             attributes.center = center
@@ -118,19 +118,23 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
     override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
         return true
     }
+    /// 确保每次只滚动一页的距离，不管实际滚动多少，只要和上一次位置距离超过 30 就进行页面跳转(滚动)
     override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
 //        NSLog("propsed:\(proposedContentOffset),velocity:\(velocity),offset:\(self.collectionView!.contentOffset)")
         var targetContentOffset = proposedContentOffset
         if abs(self.collectionView!.contentOffset.x - proposedContentOffset.x) >= 30.0 {
+            /// 往后一页
             if velocity.x > 0.0 {
                     self.targetOffsetX += self.pageDistance
             }
+            /// 往前一页
             else {
                 self.targetOffsetX -= self.pageDistance
             }
             self.targetOffsetX = max(self.targetOffsetX, 0.0)
             self.targetOffsetX = min(self.collectionView!.contentSize.width - self.collectionView!.bounds.width, self.targetOffsetX)
         }
+        /// 如果滚动距离太小，就回到原来的位置
         targetContentOffset.x = self.targetOffsetX
 //        NSLog("targetOffsetX:%f",self.targetOffsetX)
         return targetContentOffset

@@ -8,9 +8,13 @@
 
 import UIKit
 
+/// 在 cell 上拖动时发生的回调
 @objc protocol SideBoxCollectionViewCellDelegate {
+    /// 拖动开始时
     func movedBeganOnCell(cell:SideBoxCollectionViewCell)
+    /// 拖动结束时，是否需要跳转到下一页
     func cell(cell:SideBoxCollectionViewCell, movedToNext toNext:Bool)
+    /// 拖动的过程中
     func cell(cell:SideBoxCollectionViewCell, translated translation:CGPoint)
     
 }
@@ -71,14 +75,15 @@ extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
         }
         else if gesture.state == UIGestureRecognizerState.Ended || gesture.state == UIGestureRecognizerState.Cancelled {
             let translate = gesture.translationInView(self.contentView)
+            /// 拖动的距离太小，回到原来的位置
             if translate.y > -1 * self.bounds.size.height * 0.5 {
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
                     self.transform = CGAffineTransformIdentity
                     }, completion: { (completed) -> Void in
-                        self.cellDelegate?.cell(self, movedToNext: false)
+                        self.cellDelegate?.cell(self, movedToNext: false) /// 动画结束后修正位置
                 })
             }
-            else{
+            else{ /// 只可以往上拖动（左右是滚动）, 距离足够大的话就实现删除效果
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
                     var targetOffsetX : CGFloat = 0.0
                     if translate.x > 0 {
@@ -91,22 +96,23 @@ extension SideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                     self.transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
-                        self.cellDelegate?.cell(self, movedToNext: true)
+                        self.cellDelegate?.cell(self, movedToNext: true) /// 动画结束后修正位置，实现真正的删除
                         
                 })
             }
         }
+        /// 拖动的过程中
         else if gesture.state == UIGestureRecognizerState.Changed {
             let translate = gesture.translationInView(self.contentView)
             let translate_transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
             var angle : CGFloat = 0.0
-            if abs(translate.x) > 20.0 {
+            if abs(translate.x) > 20.0 { /// 横向拖动要足够大的距离，不然在中间位置时会跳动
                 angle = atan(translate.y / translate.x)
 //                print("x:\(translate.x),y:\(translate.y),angle:\(angle)")
             }
             let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
             self.transform = CGAffineTransformRotate(translate_transform, radian)
-            self.cellDelegate?.cell(self, translated: translate)
+            self.cellDelegate?.cell(self, translated: translate) /// 拖动过程中，对其他 cell 要同步修正位置
         }
         
     }

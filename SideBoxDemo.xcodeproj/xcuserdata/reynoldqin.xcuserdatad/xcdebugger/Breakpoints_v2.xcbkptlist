@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SideBoxDemo/SideBoxCollectionLayout.swift"
-            timestampString = "469610032.776852"
+            timestampString = "469614914.895007"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "targetContentOffsetForProposedContentOffset(_:withScrollingVelocity:)"
             landmarkType = "5">
          </BreakpointContent>
