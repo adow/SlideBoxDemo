@@ -10,7 +10,6 @@ import UIKit
 
 @objc protocol SideBoxCollectionViewCellDelegate {
     func movedBeganOnCell(cell:SideBoxCollectionViewCell)
-//    func movedEndedOnCell(cell:SideBoxCollectionViewCell)
     func cell(cell:SideBoxCollectionViewCell, movedToNext toNext:Bool)
     func cell(cell:SideBoxCollectionViewCell, translated translation:CGPoint)
     

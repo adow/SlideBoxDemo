@@ -23,7 +23,6 @@ class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
                     translate = -1.0 * (self.screenSize.width / 2.0 + self.cardWidth / 2.0)
                 }
                 else {
-//                    translate = -1.0 * offset_x % pageDistance
                     translate = -1.0 * (ratio - floor(ratio)) * pageDistance * 10.0
                     if translate == 0.0 {
                         translate = -pageDistance
@@ -40,10 +39,19 @@ class SideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
             
         }
     }
-    var screenSize:CGSize!
+    lazy var screenSize:CGSize = UIScreen.mainScreen().bounds.size
     var pageDistance:CGFloat!
     var cardWidth:CGFloat!
     var cardHeight:CGFloat!
+   
+    static func attribuatesForIndexPath(indexPath:NSIndexPath, pageDistance:CGFloat, cardWidth:CGFloat,cardHeight: CGFloat) -> SideBoxCollectionLayoutAttributes{
+        let attributes = SideBoxCollectionLayoutAttributes(forCellWithIndexPath: indexPath)
+        attributes.pageDistance = pageDistance
+        attributes.cardWidth = cardWidth
+        attributes.cardHeight = cardHeight
+        return attributes
+    }
+    
     override func copyWithZone(zone: NSZone) -> AnyObject {
         let copy = super.copyWithZone(zone) as! SideBoxCollectionLayoutAttributes
         copy.screenSize = self.screenSize
@@ -62,7 +70,6 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
     private var attributesList : [UICollectionViewLayoutAttributes] = []
     private var targetOffsetX : CGFloat = 0.0
     /// 让第一页要滚动
-    var stopScrollForTopCards:Bool = false
     override init() {
         super.init()
         self.scrollDirection = UICollectionViewScrollDirection.Horizontal
@@ -91,22 +98,11 @@ class SideBoxCollectionLayout: UICollectionViewFlowLayout {
             let ratio = 1.0 - ( CGFloat(a) * 0.1) + (offset_x / pageDistance) / 10.0
             
             let indexPath = NSIndexPath(forItem: a, inSection: 0)
-            let attributes = SideBoxCollectionLayoutAttributes(forCellWithIndexPath: indexPath)
+            let attributes = SideBoxCollectionLayoutAttributes.attribuatesForIndexPath(indexPath, pageDistance: pageDistance, cardWidth: cardWidth, cardHeight: cardHeight)
             attributes.center = center
             attributes.bounds = bounds
             attributes.zIndex = 10000 - a
-            attributes.screenSize = UIScreen.mainScreen().bounds.size
-            attributes.pageDistance = self.pageDistance
-            attributes.cardWidth = self.cardWidth
-            attributes.cardHeight = self.cardHeight
             attributes.ratio = ratio
-//            if ratio >= 1.0 && self.stopScrollForTopCards {
-//                attributes.ratio = 1.0
-//            }
-//            else{
-//                attributes.ratio = ratio
-//            }
-//            print("\(a):\(ratio)")
             array.append(attributes)
         }
         self.attributesList = array

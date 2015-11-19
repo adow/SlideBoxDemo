@@ -12,9 +12,6 @@ class ViewController: UIViewController {
     var collectionView : UICollectionView!
     private let cellIdentifier = "cell"
     var panGesture:UIPanGestureRecognizer!
-    var contentOffsetX_onPanBegan : CGFloat!
-    var cellSnapShot:UIView!
-    var indexPathSnapShot:NSIndexPath!
     var cellTexts:[String]!
     var cellImages:[UIImage]!
     override func viewDidLoad() {
@@ -96,14 +93,10 @@ extension ViewController:SideBoxCollectionViewCellDelegate {
     }
     func movedBeganOnCell(cell: SideBoxCollectionViewCell) {
         NSLog("Began Move")
-        let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
-        layout.stopScrollForTopCards = true
-        self.contentOffsetX_onPanBegan = self.collectionView.contentOffset.x
     }
     func cell(cell: SideBoxCollectionViewCell, movedToNext toNext: Bool) {
         NSLog("End Move")
         let layout = self.collectionView.collectionViewLayout as! SideBoxCollectionLayout
-        layout.stopScrollForTopCards = false
         if toNext {
             let cardIndex = Int(floor(self.collectionView.contentOffset.x / layout.pageDistance))
             let indexPath = NSIndexPath(forItem: cardIndex, inSection: 0)
