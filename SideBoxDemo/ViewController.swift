@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         /// collectionView
         collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: SlideBoxCollectionLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.backgroundColor = UIColor.blackColor()
         collectionView.showsHorizontalScrollIndicator = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast

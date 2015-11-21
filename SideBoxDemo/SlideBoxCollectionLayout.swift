@@ -65,8 +65,8 @@ class SlideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
 
 class SlideBoxCollectionLayout: UICollectionViewFlowLayout {
     let pageDistance : CGFloat = ceil(UIScreen.mainScreen().bounds.width * 0.5 + UIScreen.mainScreen().bounds.width * 0.6)
-    let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.6
-    let cardHeight : CGFloat = UIScreen.mainScreen().bounds.height * 0.6
+    let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.9
+    let cardHeight : CGFloat = UIScreen.mainScreen().bounds.height * 0.9
     private var attributesList : [UICollectionViewLayoutAttributes] = []
     /// 用来在滚动时限定在一个固定的位置
     private var targetOffsetX : CGFloat = 0.0
