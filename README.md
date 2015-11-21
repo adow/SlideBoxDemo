@@ -2,6 +2,8 @@
 
 Slidebox 是 iOS 上一个用来管理照片的 App，他一张张的滑动方式浏览，把不需要的照片往上滑动就是删除这一张，如果相册中拍了很多类似的照片，通过这样的方式来筛选照片是个不错的主意。
 
+![SideBox](http://7vihfk.com1.z0.glb.clouddn.com/thumb_IMG_3303_1024.jpg)
+
 所以我模仿 SlideBox 写了这个 Demo，左右滑动显示照片，往上就删除这张照片。
 
 > 大坑警告。这个 Demo 使用 UICollectionView 来实现这个效果，但是这并不是最优的方案，实际上这个效果直接使用 UIScrollView 就可以轻松合理的实现了，我使用 UICollectionView 只是为了学习研究而已。

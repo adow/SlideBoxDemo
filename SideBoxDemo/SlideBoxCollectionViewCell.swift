@@ -94,8 +94,13 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                     }
                     let targetOffsetY : CGFloat = -1 * self.bounds.size.height
                     let translate_transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
-                    let angle : CGFloat = 0.0
-                    let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
+                    var angle : CGFloat = 0.0
+                    if translate.y < 0 {
+                        angle = 10 * abs(translate.y) / 100.0
+                        angle = min(angle, 10.0)
+                        angle = max(angle, 0.0)
+                    }
+                    let radian = angle * CGFloat(M_PI) / 180.0 * 2.0
                     self.transform = CGAffineTransformRotate(translate_transform, radian)
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
@@ -108,11 +113,16 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
             let translate = gesture.translationInView(self.contentView)
             let translate_transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
             var angle : CGFloat = 0.0
-            if abs(translate.x) > 20.0 { /// 横向拖动要足够大的距离，不然在中间位置时会跳动
-                angle = atan(translate.y / translate.x)
-//                print("x:\(translate.x),y:\(translate.y),angle:\(angle)")
+//            if abs(translate.x) > 20.0 { /// 横向拖动要足够大的距离，不然在中间位置时会跳动
+//                angle = atan(translate.y / translate.x)
+////                print("x:\(translate.x),y:\(translate.y),angle:\(angle)")
+//            }
+            if translate.y < 0 {
+                angle = 10 * abs(translate.y) / 100.0
+                angle = min(angle, 10.0)
+                angle = max(angle, 0.0)
             }
-            let radian = -angle * CGFloat(M_PI) / 180.0 * 2.0
+            let radian = angle * CGFloat(M_PI) / 180.0
             self.transform = CGAffineTransformRotate(translate_transform, radian)
             self.cellDelegate?.cell(self, translated: translate) /// 拖动过程中，对其他 cell 要同步修正位置
         }
