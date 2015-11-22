@@ -59,9 +59,8 @@ class ViewController: UIViewController {
             self.cellImages.append(image)
         }
     }
-
-
 }
+// MARK: - UICollectionView
 extension ViewController : UICollectionViewDataSource, UICollectionViewDelegate {
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1

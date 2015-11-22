@@ -12,6 +12,7 @@ func divmod(a:CGFloat,b:CGFloat) -> (quotient:CGFloat, remainder:CGFloat){
     return (a / b, a % b)
 }
 
+// MARK: - LayoutAttributes
 class SlideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     var ratio:CGFloat! {
         didSet{
@@ -63,6 +64,7 @@ class SlideBoxCollectionLayoutAttributes:UICollectionViewLayoutAttributes {
     }
 }
 
+// MARK: - Layout
 class SlideBoxCollectionLayout: UICollectionViewFlowLayout {
     let pageDistance : CGFloat = ceil(UIScreen.mainScreen().bounds.width * 0.5 + UIScreen.mainScreen().bounds.width * 0.6)
     let cardWidth : CGFloat = UIScreen.mainScreen().bounds.width * 0.9

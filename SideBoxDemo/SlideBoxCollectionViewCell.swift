@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - Cell
+// MARK: Cell Delegate
 /// 在 cell 上拖动时发生的回调
 @objc protocol SlideBoxCollectionViewCellDelegate {
     /// 拖动开始时
@@ -18,7 +20,7 @@ import UIKit
     func cell(cell:SlideBoxCollectionViewCell, translated translation:CGPoint)
     
 }
-
+// MARK: Cell
 class SlideBoxCollectionViewCell: UICollectionViewCell {
     var label : UILabel!
     var cellImageView :UIImageView!
@@ -65,14 +67,26 @@ class SlideBoxCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }
+// MARK: - Move
 extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
     func onPanGesture(gesture:UIPanGestureRecognizer){
+        /// 根据拖动距离计算角度,只有往上拖动会旋转
+        func _angleForTranslate(translate:CGPoint) ->CGFloat {
+            var angle : CGFloat = 0.0
+            if translate.y < 0 {
+                angle = 10 * abs(translate.y) / 100.0
+                angle = min(angle, 10.0)
+                angle = max(angle, 0.0)
+            }
+            let radian = angle * CGFloat(M_PI) / 180.0
+            return radian
+        }
+        /// 开始拖动
         if gesture.state == UIGestureRecognizerState.Began {
             self.cellDelegate?.movedBeganOnCell(self)
         }
+        /// 结束拖动
         else if gesture.state == UIGestureRecognizerState.Ended || gesture.state == UIGestureRecognizerState.Cancelled {
             let translate = gesture.translationInView(self.contentView)
             /// 拖动的距离太小，回到原来的位置
@@ -94,13 +108,7 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
                     }
                     let targetOffsetY : CGFloat = -1 * self.bounds.size.height
                     let translate_transform = CGAffineTransformMakeTranslation(targetOffsetX, targetOffsetY)
-                    var angle : CGFloat = 0.0
-                    if translate.y < 0 {
-                        angle = 10 * abs(translate.y) / 100.0
-                        angle = min(angle, 10.0)
-                        angle = max(angle, 0.0)
-                    }
-                    let radian = angle * CGFloat(M_PI) / 180.0 * 2.0
+                    let radian : CGFloat = _angleForTranslate(translate) * 2.0
                     self.transform = CGAffineTransformRotate(translate_transform, radian)
                     self.alpha = 0.0
                     }, completion: { (completed) -> Void in
@@ -112,17 +120,7 @@ extension SlideBoxCollectionViewCell : UIGestureRecognizerDelegate {
         else if gesture.state == UIGestureRecognizerState.Changed {
             let translate = gesture.translationInView(self.contentView)
             let translate_transform = CGAffineTransformMakeTranslation(translate.x, translate.y)
-            var angle : CGFloat = 0.0
-//            if abs(translate.x) > 20.0 { /// 横向拖动要足够大的距离，不然在中间位置时会跳动
-//                angle = atan(translate.y / translate.x)
-////                print("x:\(translate.x),y:\(translate.y),angle:\(angle)")
-//            }
-            if translate.y < 0 {
-                angle = 10 * abs(translate.y) / 100.0
-                angle = min(angle, 10.0)
-                angle = max(angle, 0.0)
-            }
-            let radian = angle * CGFloat(M_PI) / 180.0
+            let radian = _angleForTranslate(translate)
             self.transform = CGAffineTransformRotate(translate_transform, radian)
             self.cellDelegate?.cell(self, translated: translate) /// 拖动过程中，对其他 cell 要同步修正位置
         }
